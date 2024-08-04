@@ -6,7 +6,7 @@
 /*   By: fmaurer <fmaurer42@posteo.de>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 10:39:24 by fmaurer           #+#    #+#             */
-/*   Updated: 2024/08/04 16:26:07 by fmaurer          ###   ########.fr       */
+/*   Updated: 2024/08/04 18:29:52 by fmaurer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 # include <stdlib.h>
 
 char	*get_next_line(int fd);
-void	free_ptr(char **p);
+void	*free_ptr(char **p);
 size_t	ft_strlen(const char *s);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strdup(const char *s);

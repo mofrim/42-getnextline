@@ -6,7 +6,7 @@
 /*   By: fmaurer <fmaurer42@posteo.de>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 10:38:22 by fmaurer           #+#    #+#             */
-/*   Updated: 2024/08/04 16:26:21 by fmaurer          ###   ########.fr       */
+/*   Updated: 2024/08/04 18:47:45 by fmaurer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	*extract_line(char **master_buf);
 
-void	read_data_from_file(int fd, char **master_buf, ssize_t *read_return, \
+int		read_data_from_file(int fd, char **master_buf, ssize_t *read_return, \
 		char **temp);
 
 void	update_masterbuf(int cnt, int linelen, char **master_buf);
@@ -30,15 +30,20 @@ char	*get_next_line(int fd)
 	read_return = BUFFER_SIZE;
 	if (!master_buf[fd])
 		master_buf[fd] = ft_strdup("");
-	while (!ft_strchr(master_buf[fd], '\n') && read_return == BUFFER_SIZE)
-		read_data_from_file(fd, &master_buf[fd], &read_return, &temp);
-	if (read_return == -1 || (!read_return && !*master_buf[fd]))
-	{
-		free_ptr(&master_buf[fd]);
+	if (!master_buf[fd])
 		return (NULL);
-	}
+	while (!ft_strchr(master_buf[fd], '\n') && read_return == BUFFER_SIZE)
+		if (!read_data_from_file(fd, &master_buf[fd], &read_return, &temp))
+			return (free_ptr(&master_buf[fd]));
+	if (read_return == -1 || (!read_return && !*master_buf[fd]))
+		return (free_ptr(&master_buf[fd]));
 	if (ft_strchr(master_buf[fd], '\n'))
-		return (extract_line(&master_buf[fd]));
+	{
+		temp = extract_line(&master_buf[fd]);
+		if (!temp)
+			return (free_ptr(&master_buf[fd]));
+		return (temp);
+	}
 	else
 	{
 		temp = ft_strdup(master_buf[fd]);
@@ -47,7 +52,7 @@ char	*get_next_line(int fd)
 	}
 }
 
-void	read_data_from_file(int fd, char **master_buf, ssize_t *read_return, \
+int	read_data_from_file(int fd, char **master_buf, ssize_t *read_return, \
 		char **temp)
 {
 	char	*buf;
@@ -55,23 +60,25 @@ void	read_data_from_file(int fd, char **master_buf, ssize_t *read_return, \
 
 	buf = (char *) ft_calloc(BUFFER_SIZE + 1, sizeof(char));
 	if (!buf)
-	{
-		*master_buf = NULL;
-		return ;
-	}
+		return (0);
 	*read_return = read(fd, buf, BUFFER_SIZE);
 	if (*read_return > 0)
 	{
 		*temp = *master_buf;
 		*master_buf = ft_strjoin(*master_buf, buf);
 		if (!(*master_buf))
-			return ;
+		{
+			free_ptr(&buf);
+			free_ptr(temp);
+			return (0);
+		}
 		i = -1;
 		while (++i <= BUFFER_SIZE)
 			buf[i] = 0;
 		free_ptr(temp);
 	}
 	free_ptr(&buf);
+	return (1);
 }
 
 char	*extract_line(char **master_buf)
@@ -113,7 +120,7 @@ void	update_masterbuf(int cnt, int linelen, char **master_buf)
 	tmp_buf = ft_calloc(cnt + 1, sizeof(char));
 	if (!tmp_buf)
 	{
-		*master_buf = NULL;
+		free_ptr(master_buf);
 		return ;
 	}
 	while (--cnt >= 0)
@@ -121,15 +128,20 @@ void	update_masterbuf(int cnt, int linelen, char **master_buf)
 	master_tmp = *master_buf;
 	*master_buf = (char *) ft_calloc(cntbak, sizeof(char));
 	if (!(*master_buf))
+	{
+		free_ptr(&tmp_buf);
+		free_ptr(&master_tmp);
 		return ;
+	}
 	while (--cntbak >= 0)
 		(*master_buf)[cntbak] = tmp_buf[cntbak];
 	free_ptr(&master_tmp);
 	free_ptr(&tmp_buf);
 }
 
-void	free_ptr(char **p)
+void	*free_ptr(char **p)
 {
 	free(*p);
 	*p = NULL;
+	return (NULL);
 }
