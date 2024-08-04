@@ -6,7 +6,7 @@
 /*   By: fmaurer <fmaurer42@posteo.de>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 10:38:22 by fmaurer           #+#    #+#             */
-/*   Updated: 2024/08/04 19:18:08 by fmaurer          ###   ########.fr       */
+/*   Updated: 2024/08/04 19:32:07 by fmaurer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,39 +14,41 @@
 
 char	*extract_line(char **master_buf);
 
-int		read_data_from_file(int fd, char **master_buf, ssize_t *read_return);
+int		read_data_from_file(int fd, char **master_buf, ssize_t *bytes_read);
 
 void	update_masterbuf(int cnt, int linelen, char **master_buf);
 
-char	*gnl_returnator(int read_return, char **master_buf);
+char	*gnl_returnator(int bytes_read, char **master_buf);
 
 char	*get_next_line(int fd)
 {
 	static char	*master_buf[ULIMIT_N];
-	ssize_t		read_return;
+	ssize_t		bytes_read;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	read_return = BUFFER_SIZE;
+	bytes_read = BUFFER_SIZE;
 	if (!master_buf[fd])
 		master_buf[fd] = ft_strdup("");
 	if (!master_buf[fd])
 		return (NULL);
-	while (!ft_strchr(master_buf[fd], '\n') && read_return == BUFFER_SIZE)
-		if (!read_data_from_file(fd, &master_buf[fd], &read_return))
+	while (!ft_strchr(master_buf[fd], '\n') && bytes_read == BUFFER_SIZE)
+	{
+		if (!read_data_from_file(fd, &master_buf[fd], &bytes_read))
 		{
 			free(master_buf[fd]);
 			master_buf[fd] = NULL;
-			return (NULL); 
+			return (NULL);
 		}
-	return (gnl_returnator(read_return, &master_buf[fd]));
+	}
+	return (gnl_returnator(bytes_read, &master_buf[fd]));
 }
 
-char	*gnl_returnator(int read_return, char **master_buf)
+char	*gnl_returnator(int bytes_read, char **master_buf)
 {
 	char	*temp;
 
-	if (read_return == -1 || (!read_return && !**master_buf))
+	if (bytes_read == -1 || (!bytes_read && !**master_buf))
 	{
 		free(*master_buf);
 		*master_buf = NULL;
@@ -58,7 +60,6 @@ char	*gnl_returnator(int read_return, char **master_buf)
 		if (!temp)
 		{
 			free(*master_buf);
-			*master_buf = NULL;
 			return (NULL);
 		}
 		return (temp);
@@ -72,7 +73,7 @@ char	*gnl_returnator(int read_return, char **master_buf)
 	}
 }
 
-int	read_data_from_file(int fd, char **master_buf, ssize_t *read_return)
+int	read_data_from_file(int fd, char **master_buf, ssize_t *bytes_read)
 {
 	char	*buf;
 	char	*temp;
@@ -81,8 +82,8 @@ int	read_data_from_file(int fd, char **master_buf, ssize_t *read_return)
 	buf = (char *) ft_calloc(BUFFER_SIZE + 1, sizeof(char));
 	if (!buf)
 		return (0);
-	*read_return = read(fd, buf, BUFFER_SIZE);
-	if (*read_return > 0)
+	*bytes_read = read(fd, buf, BUFFER_SIZE);
+	if (*bytes_read > 0)
 	{
 		temp = *master_buf;
 		*master_buf = ft_strjoin(*master_buf, buf);
@@ -114,11 +115,9 @@ char	*extract_line(char **master_buf)
 	line = (char *) ft_calloc(linelen + 2, sizeof(char));
 	if (!line)
 		return (NULL);
-	while (cnt >= 0)
-	{
+	cnt++;
+	while (--cnt >= 0)
 		line[cnt] = (*master_buf)[cnt];
-		cnt--;
-	}
 	while ((*master_buf)[linelen + 1 + cnt])
 		cnt++;
 	if (!cnt)
