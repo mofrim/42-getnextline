@@ -6,7 +6,7 @@
 /*   By: fmaurer <fmaurer42@posteo.de>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 10:38:22 by fmaurer           #+#    #+#             */
-/*   Updated: 2024/08/04 11:59:59 by fmaurer          ###   ########.fr       */
+/*   Updated: 2024/08/04 13:43:58 by fmaurer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ char	*extract_line(char **master_buf);
 
 char	*get_next_line(int fd)
 {
-	static char		*master_buf[ULIMIT_N];
-	char			*buf;
-	char			*temp;
+	static char	*master_buf[ULIMIT_N];
+	char		*buf;
+	char		*temp;
 	
 	ssize_t	read_return;
 
@@ -29,9 +29,7 @@ char	*get_next_line(int fd)
 	if (!buf)
 		return (NULL);
 	if(!master_buf[fd])
-	{
 		master_buf[fd] = ft_strdup("");
-	}
 	while (!ft_strchr(master_buf[fd], '\n') && read_return == BUFFER_SIZE)
 	{
 		read_return = read(fd, buf, BUFFER_SIZE);
@@ -102,8 +100,6 @@ char	*extract_line(char **master_buf)
 	while (--cntbak >= 0)
 		(*master_buf)[cntbak] = tmp_buf[cntbak];
 	free_ptr(&supertmp);
-	free(tmp_buf);
-	tmp_buf = NULL;
-
+	free_ptr(&tmp_buf);
 	return (line);
 }
