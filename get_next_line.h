@@ -6,7 +6,7 @@
 /*   By: fmaurer <fmaurer42@posteo.de>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 10:39:24 by fmaurer           #+#    #+#             */
-/*   Updated: 2024/08/04 13:49:30 by fmaurer          ###   ########.fr       */
+/*   Updated: 2024/08/04 16:26:07 by fmaurer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,5 @@ char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strdup(const char *s);
 char	*ft_strchr(const char *s, int c);
 void	*ft_calloc(size_t nmemb, size_t size);
-void	ft_bzero(void *s, size_t n);
 
 #endif

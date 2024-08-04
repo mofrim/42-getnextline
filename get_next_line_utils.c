@@ -6,7 +6,7 @@
 /*   By: fmaurer <fmaurer42@posteo.de>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 10:38:39 by fmaurer           #+#    #+#             */
-/*   Updated: 2024/08/04 13:48:56 by fmaurer          ###   ########.fr       */
+/*   Updated: 2024/08/04 16:26:03 by fmaurer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,6 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-void	ft_bzero(void *s, size_t n)
-{
-	char	*p;
-	size_t	i;
-
-	p = s;
-	i = -1;
-	while (++i < n)
-		p[i] = 0;
-}
-
 void	*ft_calloc(size_t nmemb, size_t size)
 {
 	void	*mem;
@@ -56,12 +45,6 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	while (++i < memsize)
 		p[i] = 0;
 	return (mem);
-}
-
-void	free_ptr(char **p)
-{
-	free(*p);
-	*p = NULL;
 }
 
 char	*ft_strdup(const char *s)
