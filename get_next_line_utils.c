@@ -6,7 +6,7 @@
 /*   By: fmaurer <fmaurer42@posteo.de>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 10:38:39 by fmaurer           #+#    #+#             */
-/*   Updated: 2024/08/04 16:26:03 by fmaurer          ###   ########.fr       */
+/*   Updated: 2024/08/04 17:17:43 by fmaurer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
+/* Alloc and fill with zeros. */
 void	*ft_calloc(size_t nmemb, size_t size)
 {
 	void	*mem;
