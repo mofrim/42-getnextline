@@ -6,7 +6,7 @@
 /*   By: fmaurer <fmaurer42@posteo.de>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 10:38:22 by fmaurer           #+#    #+#             */
-/*   Updated: 2024/08/04 13:43:58 by fmaurer          ###   ########.fr       */
+/*   Updated: 2024/08/04 14:02:37 by fmaurer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ char	*get_next_line(int fd)
 	static char	*master_buf[ULIMIT_N];
 	char		*buf;
 	char		*temp;
-	
 	ssize_t	read_return;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
@@ -42,13 +41,7 @@ char	*get_next_line(int fd)
 		}
 	}
 	free(buf);
-	if (read_return == -1)
-	{
-		free_ptr(&master_buf[fd]);
-		return (NULL);
-
-	}
-	if (!read_return && !*master_buf[fd])
+	if (read_return == -1 || (!read_return && !*master_buf[fd]))
 	{
 		free_ptr(&master_buf[fd]);
 		return(NULL);
@@ -93,10 +86,14 @@ char	*extract_line(char **master_buf)
 		return (line);
 	}
 	tmp_buf = ft_calloc(cnt + 1, sizeof(char));
+	if (!tmp_buf)
+		return (NULL);
 	while (--cnt >= 0)
 		tmp_buf[cnt] = (*master_buf)[linelen + 1 + cnt];
 	supertmp = *master_buf;
 	*master_buf = (char *) ft_calloc(cntbak, sizeof(char));
+	if (!(*master_buf))
+		return (NULL);
 	while (--cntbak >= 0)
 		(*master_buf)[cntbak] = tmp_buf[cntbak];
 	free_ptr(&supertmp);

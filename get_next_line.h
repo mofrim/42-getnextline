@@ -6,16 +6,16 @@
 /*   By: fmaurer <fmaurer42@posteo.de>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 10:39:24 by fmaurer           #+#    #+#             */
-/*   Updated: 2024/08/04 11:51:32 by fmaurer          ###   ########.fr       */
+/*   Updated: 2024/08/04 13:49:30 by fmaurer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
-#ifndef BUFFER_SIZE
-# define BUFFER_SIZE 100
-#endif // DEBUG
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 100
+# endif
 
 /* `ulimit -n` on my system. Number of open files per process. */
 # define ULIMIT_N 1024
