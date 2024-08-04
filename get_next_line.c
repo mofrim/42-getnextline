@@ -6,7 +6,7 @@
 /*   By: fmaurer <fmaurer42@posteo.de>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 10:38:22 by fmaurer           #+#    #+#             */
-/*   Updated: 2024/08/04 18:47:45 by fmaurer          ###   ########.fr       */
+/*   Updated: 2024/08/04 19:18:08 by fmaurer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 char	*extract_line(char **master_buf);
 
-int		read_data_from_file(int fd, char **master_buf, ssize_t *read_return, \
-		char **temp);
+int		read_data_from_file(int fd, char **master_buf, ssize_t *read_return);
 
 void	update_masterbuf(int cnt, int linelen, char **master_buf);
+
+char	*gnl_returnator(int read_return, char **master_buf);
 
 char	*get_next_line(int fd)
 {
 	static char	*master_buf[ULIMIT_N];
-	char		*temp;
 	ssize_t		read_return;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
@@ -33,29 +33,49 @@ char	*get_next_line(int fd)
 	if (!master_buf[fd])
 		return (NULL);
 	while (!ft_strchr(master_buf[fd], '\n') && read_return == BUFFER_SIZE)
-		if (!read_data_from_file(fd, &master_buf[fd], &read_return, &temp))
-			return (free_ptr(&master_buf[fd]));
-	if (read_return == -1 || (!read_return && !*master_buf[fd]))
-		return (free_ptr(&master_buf[fd]));
-	if (ft_strchr(master_buf[fd], '\n'))
+		if (!read_data_from_file(fd, &master_buf[fd], &read_return))
+		{
+			free(master_buf[fd]);
+			master_buf[fd] = NULL;
+			return (NULL); 
+		}
+	return (gnl_returnator(read_return, &master_buf[fd]));
+}
+
+char	*gnl_returnator(int read_return, char **master_buf)
+{
+	char	*temp;
+
+	if (read_return == -1 || (!read_return && !**master_buf))
 	{
-		temp = extract_line(&master_buf[fd]);
+		free(*master_buf);
+		*master_buf = NULL;
+		return (NULL);
+	}
+	if (ft_strchr(*master_buf, '\n'))
+	{
+		temp = extract_line(master_buf);
 		if (!temp)
-			return (free_ptr(&master_buf[fd]));
+		{
+			free(*master_buf);
+			*master_buf = NULL;
+			return (NULL);
+		}
 		return (temp);
 	}
 	else
 	{
-		temp = ft_strdup(master_buf[fd]);
-		free_ptr(&master_buf[fd]);
+		temp = ft_strdup(*master_buf);
+		free(*master_buf);
+		*master_buf = NULL;
 		return (temp);
 	}
 }
 
-int	read_data_from_file(int fd, char **master_buf, ssize_t *read_return, \
-		char **temp)
+int	read_data_from_file(int fd, char **master_buf, ssize_t *read_return)
 {
 	char	*buf;
+	char	*temp;
 	ssize_t	i;
 
 	buf = (char *) ft_calloc(BUFFER_SIZE + 1, sizeof(char));
@@ -64,20 +84,20 @@ int	read_data_from_file(int fd, char **master_buf, ssize_t *read_return, \
 	*read_return = read(fd, buf, BUFFER_SIZE);
 	if (*read_return > 0)
 	{
-		*temp = *master_buf;
+		temp = *master_buf;
 		*master_buf = ft_strjoin(*master_buf, buf);
 		if (!(*master_buf))
 		{
-			free_ptr(&buf);
-			free_ptr(temp);
+			free(buf);
+			free(temp);
 			return (0);
 		}
 		i = -1;
 		while (++i <= BUFFER_SIZE)
 			buf[i] = 0;
-		free_ptr(temp);
+		free(temp);
 	}
-	free_ptr(&buf);
+	free(buf);
 	return (1);
 }
 
@@ -103,7 +123,8 @@ char	*extract_line(char **master_buf)
 		cnt++;
 	if (!cnt)
 	{
-		free_ptr(master_buf);
+		free(*master_buf);
+		*master_buf = NULL;
 		return (line);
 	}
 	update_masterbuf(cnt, linelen, master_buf);
@@ -120,7 +141,7 @@ void	update_masterbuf(int cnt, int linelen, char **master_buf)
 	tmp_buf = ft_calloc(cnt + 1, sizeof(char));
 	if (!tmp_buf)
 	{
-		free_ptr(master_buf);
+		free(*master_buf);
 		return ;
 	}
 	while (--cnt >= 0)
@@ -129,19 +150,12 @@ void	update_masterbuf(int cnt, int linelen, char **master_buf)
 	*master_buf = (char *) ft_calloc(cntbak, sizeof(char));
 	if (!(*master_buf))
 	{
-		free_ptr(&tmp_buf);
-		free_ptr(&master_tmp);
+		free(tmp_buf);
+		free(master_tmp);
 		return ;
 	}
 	while (--cntbak >= 0)
 		(*master_buf)[cntbak] = tmp_buf[cntbak];
-	free_ptr(&master_tmp);
-	free_ptr(&tmp_buf);
-}
-
-void	*free_ptr(char **p)
-{
-	free(*p);
-	*p = NULL;
-	return (NULL);
+	free(master_tmp);
+	free(tmp_buf);
 }
