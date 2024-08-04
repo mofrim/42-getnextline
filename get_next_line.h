@@ -6,14 +6,16 @@
 /*   By: fmaurer <fmaurer42@posteo.de>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 10:39:24 by fmaurer           #+#    #+#             */
-/*   Updated: 2024/08/02 18:11:02 by fmaurer          ###   ########.fr       */
+/*   Updated: 2024/08/04 11:02:41 by fmaurer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
+#ifndef BUFFER_SIZE
 # define BUFFER_SIZE 100
+#endif // DEBUG
 
 /* `ulimit -n` on my system. Number of open files per process. */
 # define ULIMIT_N 1024
@@ -28,7 +30,7 @@
 # include <stdlib.h>
 
 char	*get_next_line(int fd);
-void	free_pointer(char **p);
+void	free_ptr(char **p);
 
 size_t	ft_strlen(const char *s);
 char	*ft_strjoin(char const *s1, char const *s2);
