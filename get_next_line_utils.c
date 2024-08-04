@@ -6,7 +6,7 @@
 /*   By: fmaurer <fmaurer42@posteo.de>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 10:38:39 by fmaurer           #+#    #+#             */
-/*   Updated: 2024/08/04 10:34:40 by fmaurer          ###   ########.fr       */
+/*   Updated: 2024/08/04 11:38:29 by fmaurer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,17 @@ char	*ft_strchr(const char *s, int c)
 	if ((unsigned char)c == '\0')
 		return (p);
 	return (NULL);
+}
+
+void	ft_bzero(void *s, size_t n)
+{
+	char	*p;
+	size_t	i;
+
+	p = s;
+	i = -1;
+	while (++i < n)
+		p[i] = 0;
 }
 
 void	*ft_calloc(size_t nmemb, size_t size)
