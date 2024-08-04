@@ -6,7 +6,7 @@
 /*   By: fmaurer <fmaurer42@posteo.de>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 10:38:39 by fmaurer           #+#    #+#             */
-/*   Updated: 2024/08/02 18:06:14 by fmaurer          ###   ########.fr       */
+/*   Updated: 2024/08/04 10:34:40 by fmaurer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,20 +32,22 @@ char	*ft_strchr(const char *s, int c)
 void	*ft_calloc(size_t nmemb, size_t size)
 {
 	void	*mem;
+	int		memsize;
 	char	*p;
 	ssize_t	i;
 
-	mem = malloc(nmemb * size);
+	memsize = nmemb * size;
+	mem = malloc(memsize);
 	if (!mem)
 		return (NULL);
 	p = mem;
 	i = -1;
-	while (++i < size)
+	while (++i < memsize)
 		p[i] = 0;
 	return (mem);
 }
 
-void free_pointer(char **p)
+void free_ptr(char **p)
 {
 	free(*p);
 	*p = NULL;
@@ -68,8 +70,8 @@ char	*ft_strdup(const char *s)
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
-	char	*joi;
-	char	*bak;
+	char	*joined_str;
+	char	*jstr_bak;
 
 	if (!s1 && !s2)
 		return (NULL);
@@ -77,16 +79,16 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		return (ft_strdup(s2));
 	if (s1 && !s2)
 		return (ft_strdup(s1));
-	joi = (char *)malloc((ft_strlen(s1) + ft_strlen(s2)) * sizeof (char) + 1);
-	bak = joi;
-	if (!joi)
+	joined_str = (char *)malloc((ft_strlen(s1) + ft_strlen(s2)) * sizeof(char) + 1);
+	jstr_bak = joined_str;
+	if (!joined_str)
 		return (NULL);
 	while (*s1)
-		*joi++ = *s1++;
+		*joined_str++ = *s1++;
 	while (*s2)
-		*joi++ = *s2++;
-	*joi = '\0';
-	return (bak);
+		*joined_str++ = *s2++;
+	*joined_str = '\0';
+	return (jstr_bak);
 }
 size_t	ft_strlen(const char *s)
 {
