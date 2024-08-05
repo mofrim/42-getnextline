@@ -6,7 +6,7 @@
 /*   By: fmaurer <fmaurer42@posteo.de>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 10:38:22 by fmaurer           #+#    #+#             */
-/*   Updated: 2024/08/05 07:14:59 by fmaurer          ###   ########.fr       */
+/*   Updated: 2024/08/05 07:22:46 by fmaurer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,3 +176,33 @@ void	update_masterbuf(int cnt, int linelen, char **master_buf, char *tmp)
 	free(tmp);
 	free(tmp_buf);
 }
+
+// ::TEST MAIN::
+//
+// #include "get_next_line.h"
+// #include <stdio.h>
+// #include <fcntl.h>
+//
+// int main(void)
+// {
+// 	int file = open("./nl", O_RDONLY);
+// 	char *s = get_next_line(file);
+// 	printf("found this line:\n");
+// 	printf("----------------\n");
+// 	printf("%s", s);
+// 	printf("----------------\n");
+// 	printf("and this :\n");
+// 	printf("----------------\n");
+// 	free(s);
+// 	s = get_next_line(file);
+// 	printf("%s", s);
+// 	printf("----------------\n");
+// 	printf("and this :\n");
+// 	printf("----------------\n");
+// 	free(s);
+// 	s = get_next_line(file);
+// 	printf("%s", s);
+// 	printf("----------------\n");
+// 	free(s);
+// 	close(file);
+// }
