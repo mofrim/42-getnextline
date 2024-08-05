@@ -6,7 +6,7 @@
 /*   By: fmaurer <fmaurer42@posteo.de>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 10:38:22 by fmaurer           #+#    #+#             */
-/*   Updated: 2024/08/05 06:46:37 by fmaurer          ###   ########.fr       */
+/*   Updated: 2024/08/05 07:15:58 by fmaurer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,11 @@ char	*gnl_returnator(int bytes_read, char **master_buf, char *tmp);
 
 /* The heart of this project. With only ONE function more i could have made the
  * code much more readable and shorter: free_ptr. But still this reads and
- * returns lines from filedes fd. */
+ * returns lines from filedes fd.
+ *
+ * Arghl arghs! Had to add ugly tmp pointer to this function in order to pass it
+ * on to other funcs because there was no space left in them.
+ * DISCLAIMER: this is only necessary to make franci strictly happy! */
 char	*get_next_line(int fd)
 {
 	static char	*master_buf[ULIMIT_N];
