@@ -6,7 +6,7 @@
 /*   By: fmaurer <fmaurer42@posteo.de>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 10:38:39 by fmaurer           #+#    #+#             */
-/*   Updated: 2024/08/04 17:28:17 by fmaurer          ###   ########.fr       */
+/*   Updated: 2024/08/05 06:04:48 by fmaurer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,21 +48,24 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	return (mem);
 }
 
-char	*ft_strdup(const char *s)
+/* Allocate enough space & return duplicated string str. */
+char	*ft_strdup(const char *str)
 {
-	char	*c;
+	char	*dupl;
 	int		i;
 
-	c = (char *)malloc(ft_strlen(s) * sizeof (char) + 1);
-	if (!c || !s)
+	dupl = (char *)malloc((ft_strlen(str) + 1) * sizeof(char));
+	if (!dupl || !str)
 		return (NULL);
 	i = -1;
-	while (s[++i])
-		c[i] = s[i];
-	c[i] = '\0';
-	return (c);
+	while (str[++i])
+		dupl[i] = str[i];
+	dupl[i] = '\0';
+	return (dupl);
 }
 
+/* Allocated enough space for the joining of string s1 and s2 and return the
+ * joined string. */
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	char	*jstr;
@@ -86,6 +89,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (jstr_bak);
 }
 
+/* Well, strlen. */
 size_t	ft_strlen(const char *s)
 {
 	const char	*p;

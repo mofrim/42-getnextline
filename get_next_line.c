@@ -6,7 +6,7 @@
 /*   By: fmaurer <fmaurer42@posteo.de>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 10:38:22 by fmaurer           #+#    #+#             */
-/*   Updated: 2024/08/04 19:32:07 by fmaurer          ###   ########.fr       */
+/*   Updated: 2024/08/05 06:16:50 by fmaurer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@ void	update_masterbuf(int cnt, int linelen, char **master_buf);
 
 char	*gnl_returnator(int bytes_read, char **master_buf);
 
+/* The heart of this project. With only ONE function more i could have made the
+ * code much more readable and shorter: free_ptr. But still this reads and
+ * returns lines from filedes fd. */
 char	*get_next_line(int fd)
 {
 	static char	*master_buf[ULIMIT_N];
@@ -44,6 +47,8 @@ char	*get_next_line(int fd)
 	return (gnl_returnator(bytes_read, &master_buf[fd]));
 }
 
+/* The GNL-Returnator! Extracted function from main gnl to handle return value
+ * of gnl. */
 char	*gnl_returnator(int bytes_read, char **master_buf)
 {
 	char	*temp;
@@ -73,6 +78,8 @@ char	*gnl_returnator(int bytes_read, char **master_buf)
 	}
 }
 
+/* Responsible for reading from file fd. Returns 0 if anything (malloc) goes
+ * wrong down here. 1 otherwise.*/
 int	read_data_from_file(int fd, char **master_buf, ssize_t *bytes_read)
 {
 	char	*buf;
@@ -102,6 +109,8 @@ int	read_data_from_file(int fd, char **master_buf, ssize_t *bytes_read)
 	return (1);
 }
 
+/* Extracts line from read data. Then calls update_masterbuf() to deal with the
+ * remaining data. Returns the first line found or NULL if malloc fails. */
 char	*extract_line(char **master_buf)
 {
 	char	*line;
@@ -130,6 +139,9 @@ char	*extract_line(char **master_buf)
 	return (line);
 }
 
+/* Removes the extracted line from master_buf, frees the old master_buf and
+ * sets the master_buf pointer to mem containing the remaining data. No returns
+ * but manages possible leaks by freeing stuff in case of failing allocs. */
 void	update_masterbuf(int cnt, int linelen, char **master_buf)
 {
 	int		cntbak;
