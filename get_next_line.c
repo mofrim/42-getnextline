@@ -6,12 +6,11 @@
 /*   By: fmaurer <fmaurer42@posteo.de>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 10:38:22 by fmaurer           #+#    #+#             */
-/*   Updated: 2024/08/05 07:22:46 by fmaurer          ###   ########.fr       */
+/*   Updated: 2024/08/05 09:22:02 by fmaurer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
 char	*extract_line(char **master_buf, char *tmp);
 
